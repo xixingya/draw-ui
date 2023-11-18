@@ -14,7 +14,9 @@
     "next": "14.0.1",
     "prismjs": "^1.29.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "https-proxy-agent": "^7.0.2",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/canvas-size": "^1.2.1",
@@ -30,6 +32,6 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.17.0"
   }
 }

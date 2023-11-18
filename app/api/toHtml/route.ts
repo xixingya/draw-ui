@@ -3,6 +3,8 @@ const systemPrompt = `You are an expert tailwind developer. A user will provide 
  a single html file that uses tailwind to create the website. Use creative license to make the application more fleshed out.
 if you need to insert an image, use placehold.co to create a placeholder image. Respond only with the html file.`;
 
+import fetch, {RequestInit} from 'node-fetch';
+import {HttpsProxyAgent} from 'https-proxy-agent';
 export async function POST(request: Request) {
   const { image } = await request.json();
   const body: GPT4VCompletionRequest = {
@@ -28,14 +30,19 @@ export async function POST(request: Request) {
 
   let json = null;
   try {
-    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify(body),
-    });
+    const  proxy = process.env.PROXY;
+    const params:RequestInit = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify(body),
+    }
+    if(proxy) {
+        params.agent = new HttpsProxyAgent(proxy)
+    }
+    const resp = await fetch("https://api.openai.com/v1/chat/completions", params);
     json = await resp.json();
   } catch (e) {
     console.log(e);
